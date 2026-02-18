@@ -1,3 +1,5 @@
+import { AssetConfig } from "../types/asset.types";
+
 export function getMockConversionRate(asset: string): number {
   const rates: Record<string, number> = {
     USDC: 1,
@@ -12,9 +14,9 @@ export function getMockConversionRate(asset: string): number {
 export function convertToSettlement(
   originalAmount: number,
   originalAsset: string,
-  settlementAsset: string
+  settlementAsset: AssetConfig
 ) {// Si es la misma moneda → no convertir
-  if (originalAsset === settlementAsset) {
+  if (originalAsset === settlementAsset.code) {
     return {
       conversionRate: 1,
       convertedAmount: originalAmount,

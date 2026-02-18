@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { Payment, PaymentMethod } from "../types/payment.types";
 import { getSplitByIdService, releaseSettlement } from "./splits.service";
 import { convertToSettlement } from "./conversion.service";
-import { sendWebhook } from "./webhook.service";
+import { sendWebhook } from "./webhook.service"; //opcional, para notificar cambios a un sistema externo
 
 
 const payments: Payment[] = [];
@@ -25,22 +25,19 @@ export async function registerPaymentService(
 
   const split = await getSplitByIdService(splitId);
 
+  if (split.status === "CANCELLED") {
+  throw new Error("Split cancelled");}
   
   if (split.status === "SETTLED") {
-    throw new Error("Split already settled");
-  }
+    throw new Error("Split already settled");}
 
   if (split.expiresAt && new Date() > split.expiresAt) {
-    throw new Error("Split expired");
-  }
+    throw new Error("Split expired");}
 
   // simular conversion
 const { conversionRate, convertedAmount } =
   convertToSettlement(originalAmount, originalAsset, split.settlementAsset);
 
-
-
-//
 const totalPaidSoFar = payments
   .filter((p: Payment) => p.splitId === splitId)
   .reduce((sum: number, p: Payment) => sum + p.convertedAmount, 0);
@@ -48,15 +45,7 @@ const totalPaidSoFar = payments
 
 const remainingGlobal = split.totalAmount - totalPaidSoFar;
 
-//console.log("originalAsset:", originalAsset);
-//console.log("settlementAsset:", split.settlementAsset);
-//console.log("totalAmount:", split.totalAmount);
-//console.log("totalPaidSoFar:", totalPaidSoFar);
-//console.log("convertedAmount:", convertedAmount);
-//console.log("remainingGlobal:", remainingGlobal);
-//console.log("Entering releaseSettlement");
-
-
+//pruebas console console.log()
 
 if (convertedAmount > remainingGlobal) {
   throw new Error("Payment exceeds remaining split amount");
@@ -125,6 +114,7 @@ if (updatedSplit.status === "READY_FOR_SETTLEMENT") {
   };
 }
 
+// Función para obtener los pagos de un split
 export function getPaymentsBySplit(splitId: string): Payment[] {
   return payments.filter((p: Payment) => p.splitId === splitId);
 }

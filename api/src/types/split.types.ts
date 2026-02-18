@@ -1,3 +1,6 @@
+import { AssetConfig } from "./asset.types";
+
+
 export type SplitMode = "FIXED" | "OPEN_POOL";
 
 export type SplitStatus = "PENDING" | "PARTIAL" | "COMPLETED" | "READY_FOR_SETTLEMENT"
@@ -12,7 +15,8 @@ export interface Participant {
 export interface Split {
   id: string;
   totalAmount: number;
-  settlementAsset: string;
+  //settlementAsset: string;
+  settlementAsset: AssetConfig;
   mode: SplitMode;
   participants?: Participant[];
   //paidAmount: number;
@@ -27,7 +31,8 @@ export interface Split {
 
 export interface SplitInput {
   totalAmount: number;
-  settlementAsset: string;
+  //settlementAsset: string;
+  settlementAsset: AssetConfig;
   mode: SplitMode;
   participants?: Participant[];
   expiresAt?: string;

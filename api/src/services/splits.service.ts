@@ -5,10 +5,14 @@ import { Payment } from "../types/payment.types";
 import { sendSettlementPayment } from "./stellar.service";
 
 import { sendWebhook } from "./webhook.service";
+import { PaymentIntent } from "../types/payment-intent.types";
+
 
 
 const splits = new Map<string, Split>();
 
+
+// Servicio para crear un nuevo split
 export async function createSplitService(
   input: SplitInput
 ): Promise<Split> {
@@ -35,11 +39,17 @@ export async function createSplitService(
   return split;
 }
 
+
 // Servicio para obtener un split por ID
 // Este servicio se usará en el controlador de QR para generar el payload del QR
 export async function getSplitByIdService(id: string): Promise<Split> {
   const split = splits.get(id);
   if (!split) throw new Error("Split not found");
+  if (split.expiresAt && new Date() > split.expiresAt) {
+  split.status = "CANCELLED";
+  splits.set(id, split);
+  return split;
+}
   // Si ya fue liquidado, no recalculamos nada
   if (split.status === "SETTLED") {
     return split;
@@ -116,9 +126,12 @@ export async function releaseSettlement(splitId: string): Promise<Split> {
 
   // Simulamos PSP primero
   //await simulatePSPTransfer(split);
-  const amount = Number(split.totalAmount).toFixed(7);
+  //const amount = Number(split.totalAmount).toFixed(7);
 
-  const txHash = await sendSettlementPayment(amount);
+  const txHash = await sendSettlementPayment(
+  split.totalAmount.toString(),
+  split.settlementAsset
+);
   
   split.status = "SETTLED";
   split.releasedAt = new Date();
@@ -158,6 +171,14 @@ function validateSplit(input: SplitInput) {
   if (!input.settlementAsset) {
     throw new Error("Settlement asset is required");
   }
+  // Validamos que el asset tenga un código y una red
+  if (
+  !input.settlementAsset ||
+  !input.settlementAsset.network ||
+  !input.settlementAsset.code
+  ) {
+  throw new Error("Invalid settlement asset");
+  }
 
   if (!input.mode) {
     throw new Error("Mode is required");
@@ -193,7 +214,7 @@ function validateSplit(input: SplitInput) {
 }
 
 
-export async function getPaymentIntent(splitId: string) {
+export async function getPaymentIntent(splitId: string): Promise<PaymentIntent> {
   const split = await getSplitByIdService(splitId);
 
   const payments = getPaymentsBySplit(splitId);
@@ -205,15 +226,40 @@ export async function getPaymentIntent(splitId: string) {
 
   const remainingAmount = split.totalAmount - totalPaid;
 
+  let intentStatus: "PENDING" | "PARTIAL" | "READY_FOR_SETTLEMENT" | "SETTLED";
+
+  if (split.status === "SETTLED") {
+    intentStatus = "SETTLED";
+  } else if (split.status === "READY_FOR_SETTLEMENT") {
+    intentStatus = "READY_FOR_SETTLEMENT";
+  } else if (split.status === "PARTIAL") {
+    intentStatus = "PARTIAL";
+  } else {
+    intentStatus = "PENDING";
+  }
+
   return {
     splitId: split.id,
-    settlementAsset: split.settlementAsset,
-    totalAmount: split.totalAmount,
-    totalPaid,
+    amount: split.totalAmount,
     remainingAmount,
-    status: split.status,
+    settlementAsset: split.settlementAsset,
+    status: intentStatus,
     expiresAt: split.expiresAt,
+    memo: `MIGO_SPLIT_${split.id}`,
   };
 }
 
 
+export async function cancelSplitService(splitId: string): Promise<Split> {
+  const split = splits.get(splitId);
+  if (!split) throw new Error("Split not found");
+
+  if (split.status === "SETTLED") {
+    throw new Error("Cannot cancel a settled split");
+  }
+
+  split.status = "CANCELLED";
+  splits.set(splitId, split);
+
+  return split;
+}
