@@ -1,0 +1,154 @@
+<svg width="100%" viewBox="0 0 680 640" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+<style>
+  text { font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+  .t  { font-size: 13px; fill: #e8e6e0; }
+  .th { font-size: 13px; font-weight: 500; fill: #e8e6e0; }
+  .ts { font-size: 11px; fill: #9c9a92; }
+  .tg { font-size: 11px; fill: #1fcf8a; }
+  .tp { font-size: 11px; fill: #a78bfa; }
+  .tg-lg { font-size: 13px; font-weight: 500; fill: #1fcf8a; }
+</style>
+</defs>
+
+<!-- fondo -->
+<rect width="680" height="640" fill="#0a0e0d"/>
+
+<!-- título -->
+<text class="tg" x="40" y="34" font-size="10" letter-spacing="2">MIGO PROTOCOL — ARQUITECTURA TÉCNICA</text>
+<text class="ts" x="40" y="50" font-size="10">Capa de orquestación de pagos divididos sobre Stellar · ImpactaBootcamp 2026</text>
+
+<!-- ── CAPA 1: MÉTODOS DE PAGO ── -->
+<text class="ts" x="40" y="76" font-size="10" letter-spacing="1">01 — MÉTODOS DE PAGO (ENTRADA)</text>
+
+<rect x="30"  y="84" width="110" height="48" rx="6" fill="#111614" stroke="#2a2e2c" stroke-width="0.5"/>
+<text class="th" x="85"  y="104" text-anchor="middle" dominant-baseline="central">Freighter</text>
+<text class="ts" x="85"  y="122" text-anchor="middle" dominant-baseline="central">XLM · USDC</text>
+
+<rect x="150" y="84" width="110" height="48" rx="6" fill="#111614" stroke="#2a2e2c" stroke-width="0.5"/>
+<text class="th" x="205" y="104" text-anchor="middle" dominant-baseline="central">xBull</text>
+<text class="ts" x="205" y="122" text-anchor="middle" dominant-baseline="central">XLM · USDC</text>
+
+<rect x="270" y="84" width="110" height="48" rx="6" fill="#111614" stroke="#2a2e2c" stroke-width="0.5"/>
+<text class="th" x="325" y="104" text-anchor="middle" dominant-baseline="central">Meru</text>
+<text class="ts" x="325" y="122" text-anchor="middle" dominant-baseline="central">USDC en Stellar</text>
+
+<rect x="390" y="84" width="110" height="48" rx="6" fill="#111614" stroke="#2a2e2c" stroke-width="0.5"/>
+<text class="th" x="445" y="104" text-anchor="middle" dominant-baseline="central">Decaf</text>
+<text class="ts" x="445" y="122" text-anchor="middle" dominant-baseline="central">USDC · XLM</text>
+
+<rect x="510" y="84" width="140" height="48" rx="6" fill="#111614" stroke="#2a2e2c" stroke-width="0.5"/>
+<text class="th" x="580" y="104" text-anchor="middle" dominant-baseline="central">LOBSTR · Albedo</text>
+<text class="ts" x="580" y="122" text-anchor="middle" dominant-baseline="central">XLM · USDC</text>
+
+<!-- flechas hacia abajo -->
+<line x1="85"  y1="132" x2="85"  y2="164" stroke="#2a2e2c" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="205" y1="132" x2="205" y2="164" stroke="#2a2e2c" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="325" y1="132" x2="325" y2="164" stroke="#2a2e2c" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="445" y1="132" x2="445" y2="164" stroke="#2a2e2c" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="580" y1="132" x2="580" y2="164" stroke="#2a2e2c" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- ── CAPA 2: MIGO CORE ── -->
+<rect x="20" y="164" width="640" height="136" rx="12" fill="#0d1410" stroke="rgba(31,207,138,0.25)" stroke-width="0.5"/>
+<text class="tg" x="40" y="186" font-size="10" letter-spacing="1">02 — MIGO PROTOCOL · CAPA DE ORQUESTACIÓN</text>
+
+<rect x="36"  y="196" width="144" height="84" rx="6" fill="rgba(31,207,138,0.06)" stroke="rgba(31,207,138,0.2)" stroke-width="0.5"/>
+<text class="tg-lg" x="108" y="220" text-anchor="middle" dominant-baseline="central">Motor de splits</text>
+<text class="ts" x="108" y="240" text-anchor="middle" dominant-baseline="central">acumulación N:1</text>
+<text class="ts" x="108" y="256" text-anchor="middle" dominant-baseline="central">máquina de estados</text>
+
+<rect x="196" y="196" width="144" height="84" rx="6" fill="rgba(31,207,138,0.06)" stroke="rgba(31,207,138,0.2)" stroke-width="0.5"/>
+<text class="tg-lg" x="268" y="220" text-anchor="middle" dominant-baseline="central">Escrow</text>
+<text class="ts" x="268" y="240" text-anchor="middle" dominant-baseline="central">retiene hasta completar</text>
+<text class="ts" x="268" y="256" text-anchor="middle" dominant-baseline="central">Trustless Work (próximo)</text>
+
+<rect x="356" y="196" width="144" height="84" rx="6" fill="rgba(31,207,138,0.06)" stroke="rgba(31,207,138,0.2)" stroke-width="0.5"/>
+<text class="tg-lg" x="428" y="220" text-anchor="middle" dominant-baseline="central">Conversión</text>
+<text class="ts" x="428" y="240" text-anchor="middle" dominant-baseline="central">multi-activo → destino</text>
+<text class="ts" x="428" y="256" text-anchor="middle" dominant-baseline="central">Stellar DEX paths</text>
+
+<rect x="516" y="196" width="128" height="84" rx="6" fill="rgba(31,207,138,0.06)" stroke="rgba(31,207,138,0.2)" stroke-width="0.5"/>
+<text class="tg-lg" x="580" y="220" text-anchor="middle" dominant-baseline="central">QR / SEP-7</text>
+<text class="ts" x="580" y="240" text-anchor="middle" dominant-baseline="central">enlace interoperable</text>
+<text class="ts" x="580" y="256" text-anchor="middle" dominant-baseline="central">cualquier wallet</text>
+
+<!-- flecha + etiqueta -->
+<line x1="340" y1="300" x2="340" y2="332" stroke="rgba(31,207,138,0.4)" stroke-width="0.5" marker-end="url(#arrow)"/>
+<text class="tg" x="352" y="320" font-size="10">settlement automático</text>
+
+<!-- ── CAPA 3: STELLAR ── -->
+<rect x="20" y="332" width="640" height="114" rx="12" fill="#0d1410" stroke="rgba(31,207,138,0.15)" stroke-width="0.5"/>
+<text class="ts" x="40" y="354" font-size="10" letter-spacing="1" fill="rgba(31,207,138,0.5)">03 — RED STELLAR</text>
+
+<rect x="36"  y="362" width="138" height="64" rx="6" fill="rgba(31,207,138,0.04)" stroke="rgba(31,207,138,0.15)" stroke-width="0.5"/>
+<text class="tg" x="105" y="384" text-anchor="middle" dominant-baseline="central">Horizon API</text>
+<text class="ts" x="105" y="402" text-anchor="middle" dominant-baseline="central">transacciones · rutas</text>
+
+<rect x="190" y="362" width="138" height="64" rx="6" fill="rgba(31,207,138,0.04)" stroke="rgba(31,207,138,0.15)" stroke-width="0.5"/>
+<text class="tg" x="259" y="384" text-anchor="middle" dominant-baseline="central">Stellar DEX</text>
+<text class="ts" x="259" y="402" text-anchor="middle" dominant-baseline="central">path payments</text>
+
+<rect x="344" y="362" width="138" height="64" rx="6" fill="rgba(31,207,138,0.04)" stroke="rgba(31,207,138,0.15)" stroke-width="0.5"/>
+<text class="tg" x="413" y="384" text-anchor="middle" dominant-baseline="central">USDC · Circle</text>
+<text class="ts" x="413" y="402" text-anchor="middle" dominant-baseline="central">activo de settlement</text>
+
+<rect x="498" y="362" width="146" height="64" rx="6" fill="rgba(31,207,138,0.04)" stroke="rgba(31,207,138,0.15)" stroke-width="0.5"/>
+<text class="tg" x="571" y="384" text-anchor="middle" dominant-baseline="central">Soroban</text>
+<text class="ts" x="571" y="402" text-anchor="middle" dominant-baseline="central">contratos escrow (próximo)</text>
+
+<!-- flecha hacia abajo -->
+<line x1="340" y1="446" x2="340" y2="474" stroke="#2a2e2c" stroke-width="0.5" marker-end="url(#arrow)"/>
+<text class="ts" x="352" y="464" font-size="10">el comercio recibe</text>
+
+<!-- ── CAPA 4: OFF-RAMPS ── -->
+<text class="ts" x="40" y="492" font-size="10" letter-spacing="1">04 — OFF-RAMPS A MONEDA LOCAL</text>
+
+<rect x="30"  y="500" width="118" height="56" rx="6" fill="rgba(167,139,250,0.04)" stroke="rgba(167,139,250,0.2)" stroke-width="0.5"/>
+<text class="tp" x="89"  y="520" text-anchor="middle" dominant-baseline="central">Abroad Finance</text>
+<text class="ts" x="89"  y="538" text-anchor="middle" dominant-baseline="central">COP · BRL</text>
+
+<rect x="158" y="500" width="118" height="56" rx="6" fill="rgba(167,139,250,0.04)" stroke="rgba(167,139,250,0.2)" stroke-width="0.5"/>
+<text class="tp" x="217" y="520" text-anchor="middle" dominant-baseline="central">Ripio Business</text>
+<text class="ts" x="217" y="538" text-anchor="middle" dominant-baseline="central">ARS · Argentina</text>
+
+<rect x="286" y="500" width="118" height="56" rx="6" fill="rgba(167,139,250,0.04)" stroke="rgba(167,139,250,0.2)" stroke-width="0.5"/>
+<text class="tp" x="345" y="520" text-anchor="middle" dominant-baseline="central">Bitso Business</text>
+<text class="ts" x="345" y="538" text-anchor="middle" dominant-baseline="central">MXN · COP · ARS</text>
+
+<rect x="414" y="500" width="118" height="56" rx="6" fill="rgba(167,139,250,0.04)" stroke="rgba(167,139,250,0.2)" stroke-width="0.5"/>
+<text class="tp" x="473" y="520" text-anchor="middle" dominant-baseline="central">MoneyGram</text>
+<text class="ts" x="473" y="538" text-anchor="middle" dominant-baseline="central">efectivo · 180 países</text>
+
+<rect x="542" y="500" width="108" height="56" rx="6" fill="rgba(167,139,250,0.04)" stroke="rgba(167,139,250,0.2)" stroke-width="0.5"/>
+<text class="tp" x="596" y="520" text-anchor="middle" dominant-baseline="central">Wallet</text>
+<text class="ts" x="596" y="538" text-anchor="middle" dominant-baseline="central">USDC · XLM</text>
+
+<!-- ── MÁQUINA DE ESTADOS ── -->
+<line x1="30" y1="578" x2="650" y2="578" stroke="#1a1e1c" stroke-width="0.5"/>
+<text class="ts" x="40" y="574" font-size="10" letter-spacing="1">ESTADOS DEL SPLIT</text>
+
+<rect x="30"  y="586" width="80"  height="26" rx="4" fill="#111614" stroke="#2a2e2c" stroke-width="0.5"/>
+<text class="ts" x="70"  y="599" text-anchor="middle" dominant-baseline="central">PENDIENTE</text>
+
+<text class="ts" x="118" y="599" text-anchor="middle">→</text>
+
+<rect x="128" y="586" width="72"  height="26" rx="4" fill="#111614" stroke="#2a2e2c" stroke-width="0.5"/>
+<text class="ts" x="164" y="599" text-anchor="middle" dominant-baseline="central">PARCIAL</text>
+
+<text class="ts" x="208" y="599" text-anchor="middle">→</text>
+
+<rect x="218" y="586" width="168" height="26" rx="4" fill="rgba(31,207,138,0.06)" stroke="rgba(31,207,138,0.2)" stroke-width="0.5"/>
+<text class="tg" x="302" y="599" text-anchor="middle" dominant-baseline="central">LISTO_PARA_SETTLEMENT</text>
+
+<text class="ts" x="394" y="599" text-anchor="middle">→</text>
+
+<rect x="404" y="586" width="80"  height="26" rx="4" fill="rgba(31,207,138,0.1)" stroke="rgba(31,207,138,0.4)" stroke-width="0.5"/>
+<text class="tg" x="444" y="599" text-anchor="middle" dominant-baseline="central">LIQUIDADO</text>
+
+<!-- tx verificable -->
+<text class="ts" x="500" y="599" dominant-baseline="central">tx: aef8601e…f9313 ✓</text>
+
+</svg>
