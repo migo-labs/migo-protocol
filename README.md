@@ -103,9 +103,18 @@ npm run dev               # http://localhost:3000
 ### Variables de entorno (api/.env)
 
 ```env
-MIGO_SECRET=tu_secret_key_stellar
-MERCHANT_PUBLIC=public_key_del_negocio
-STELLAR_NETWORK=testnet
+DATABASE_URL=postgresql://user:password@host:5432/dbname
+MIGO_SECRET=SA...              # Clave secreta Stellar (testnet)
+MERCHANT_PUBLIC=GA...          # Dirección Stellar del comerciante
+ISSUER_PUBLIC=GA...            # Emisor USDC (testnet)
+PORT=3000
+NODE_ENV=development
+STELLAR_NETWORK=testnet                                       # testnet | mainnet
+STELLAR_HORIZON_URL_TESTNET=https://horizon-testnet.stellar.org
+STELLAR_HORIZON_URL_MAINNET=https://horizon.stellar.org
+ISSUER_PUBLIC_ASSET=            # Issuer de USDC
+                                # Circle testnet: GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5
+                                # Circle mainnet: GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN
 ```
 
 ---
@@ -145,7 +154,7 @@ GET  /splits/:id/qr             QR interoperable SEP-7
 
 ## Próximos pasos
 
-- [ ] Path Payment real via Stellar DEX (Horizon `/paths/strict-receive`)
+- [x] Path Payment real via Stellar DEX (Horizon `/paths/strict-receive`)
 - [ ] Trustless Work escrow — fondos en contrato Soroban hasta aprobación
 - [ ] Persistencia con PostgreSQL
 - [ ] Webhook con HMAC signature verification
