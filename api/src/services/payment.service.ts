@@ -22,7 +22,7 @@ export async function registerPaymentService(
     if (split.status === "SETTLED") throw new Error("Split already settled");
     if (split.expiresAt && new Date() > split.expiresAt) throw new Error("Split expired");
 
-    const { conversionRate, convertedAmount } = convertToSettlement(
+    const { conversionRate, convertedAmount } = await convertToSettlement(
     originalAmount, originalAsset, split.settlementAsset
 );
 
