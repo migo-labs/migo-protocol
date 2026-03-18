@@ -218,11 +218,18 @@ cp .env.example .env
 
 ```bash
 # .env
+DATABASE_URL=postgresql://user:password@host:5432/dbname
 MIGO_SECRET=SA...              # Clave secreta Stellar (testnet)
 MERCHANT_PUBLIC=GA...          # Dirección Stellar del comerciante
 ISSUER_PUBLIC=GA...            # Emisor USDC (testnet)
 PORT=3000
 NODE_ENV=development
+STELLAR_NETWORK=testnet                                       # testnet | mainnet
+STELLAR_HORIZON_URL_TESTNET=https://horizon-testnet.stellar.org
+STELLAR_HORIZON_URL_MAINNET=https://horizon.stellar.org
+ISSUER_PUBLIC_ASSET=            # Issuer de USDC
+                                # Circle testnet: GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5
+                                # Circle mainnet: GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN
 ```
 
 > ⚠️ **Seguridad:** Nunca commitear claves secretas reales. Usar solo claves de testnet para desarrollo.
@@ -710,7 +717,7 @@ curl -X POST http://localhost:3000/splits/{id}/pay \
 ### Limitaciones Conocidas (MVP)
 
 ⚠️ **Almacenamiento en memoria** - Los datos se reinician al reiniciar el servidor  
-⚠️ **Conversiones mock** - Tasas fijas, no FX real  
+⚠️ **Conversiones mock** - Conversión FX real vía Stellar DEX (Horizon) — ARS_BANK y BRL_BANK aún usan tasas mock hasta integración on-chain  
 ⚠️ **Sin autenticación** - API pública para demo  
 ⚠️ **Solo testnet** - No conectado a mainnet  
 ⚠️ **Pagos Web2 mock** - Transferencias bancarias simuladas  

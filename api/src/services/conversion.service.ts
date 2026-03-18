@@ -1,6 +1,8 @@
 import { AssetConfig } from "../types/asset.types";
 
-const HORIZON_URL = process.env.STELLAR_HORIZON_URL || "https://horizon-testnet.stellar.org";
+const HORIZON_URL = process.env.STELLAR_NETWORK === "mainnet"
+  ? process.env.STELLAR_HORIZON_URL_MAINNET ?? "https://horizon.stellar.org"
+  : process.env.STELLAR_HORIZON_URL_TESTNET ?? "https://horizon-testnet.stellar.org";
 
 // tasa real desde stellar dex
 
@@ -49,7 +51,7 @@ export async function getLiveConversionRate(
   return rate;
 }
 
-// tasas mock
+// TODO: reemplazar con rates reales cuando se integren ARS/BRL on-chain
 export function getMockConversionRate(asset: string): number {
   const rates: Record<string, number> = {
     USDC: 1,
@@ -79,11 +81,9 @@ export async function convertToSettlement(
     );
     return { conversionRate: rate, convertedAmount: originalAmount * rate, };
   }  catch (err){ 
-    console.warn(`[Conversion] Horizon fallo, usando tasa mock: ${err}`);
-    const rate = getMockConversionRate(originalAsset);
-    return {
-      conversionRate: rate, convertedAmount: originalAmount * rate,
-    }
+    console.error(`[Conversion] Horizon falló: ${err}`);
+    throw new Error(`No se pudo obtener tasa de conversión: ${err}`);
+
   }
 }
 
