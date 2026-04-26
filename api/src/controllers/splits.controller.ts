@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { z } from "zod";
 import {
   createSplitService,
   getSplitByIdService,
@@ -8,6 +9,43 @@ import {
   cancelSplitService
 } from "../services/splits.service";
 import { getPaymentsBySplit } from "../services/payment.service";
+
+const SettlementAssetSchema = z.discriminatedUnion("type", [
+  z.object({
+    network: z.literal("stellar"),
+    type: z.literal("native"),
+    code: z.literal("XLM"),
+  }),
+  z.object({
+    network: z.literal("stellar"),
+    type: z.literal("credit"),
+    code: z.string().min(1, "code is required"),
+    issuer: z.string().min(1, "issuer is required for credit assets"),
+  }),
+  z.object({
+    network: z.literal("fiat"),
+    type: z.literal("bank"),
+    code: z.string().min(1, "code is required"),
+  }),
+]);
+
+const CreateSplitSchema = z.object({
+  totalAmount: z.number({ message: "totalAmount must be a number" }).positive("totalAmount must be greater than 0"),
+  mode: z.enum(["OPEN_POOL", "FIXED"] as const, {
+    message: "mode must be OPEN_POOL or FIXED",
+  }),
+  settlementAsset: SettlementAssetSchema,
+  participants: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        share: z.number().optional(),
+      })
+    )
+    .optional(),
+  expiresAt: z.string().optional(),
+  webhookUrl: z.string().url("webhookUrl must be a valid URL").optional(),
+});
 
 
 // Función de validación común para IDs de split
@@ -22,13 +60,20 @@ function validateId(idParam: unknown): string {
 // 1. Controlador para crear un nuevo split
 // POST /splits
 export async function createSplit(req: Request, res: Response) {
+  const parsed = CreateSplitSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({
+      error: "Validation failed",
+      details: parsed.error.flatten().fieldErrors,
+    });
+  }
+
   try {
-    const split = await createSplitService(req.body);
+    const split = await createSplitService(parsed.data);
     res.status(201).json(split);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
-  //console.log("REQ BODY:", req.body);
 }
 
 
